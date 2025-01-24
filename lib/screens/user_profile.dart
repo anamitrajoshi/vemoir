@@ -1,7 +1,72 @@
 import 'package:flutter/material.dart';
 
-class UserProfileWidget extends StatelessWidget {
-  const UserProfileWidget({super.key});
+
+
+class ProfilePage extends StatelessWidget {
+  Widget _buildOptionTile(BuildContext context, IconData icon, String title) {
+    return Row(
+      mainAxisSize: MainAxisSize.max,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Row(
+          mainAxisSize: MainAxisSize.max,
+          children: [
+            Icon(
+              icon,
+              color: const Color(0xFF70798C),
+              size: 24,
+            ),
+            const SizedBox(width: 12),
+            Material(
+              color: Colors.transparent,
+              child: Text(
+                title,
+                style: TextStyle(
+                  fontFamily: 'Inter',
+                  fontSize: 16,
+                  color: const Color(0xFF70798C),
+                  letterSpacing: 0.0,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  // Danger Tile Method (for logout, delete account)
+  Widget _buildDangerTile(BuildContext context, IconData icon, String title, Color color) {
+    return Row(
+      mainAxisSize: MainAxisSize.max,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Row(
+          mainAxisSize: MainAxisSize.max,
+          children: [
+            Icon(
+              icon,
+              color: color,
+              size: 24,
+            ),
+            const SizedBox(width: 12),
+            Material(
+              color: Colors.transparent,
+              child: Text(
+                title,
+                style: TextStyle(
+                  fontFamily: 'Inter',
+                  fontSize: 16,
+                  color: color,
+                  letterSpacing: 0.0,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -12,6 +77,7 @@ class UserProfileWidget extends StatelessWidget {
         height: MediaQuery.of(context).size.height,
         child: Stack(
           children: [
+            // Gradient Background
             Container(
               width: MediaQuery.of(context).size.width,
               height: MediaQuery.of(context).size.height,
@@ -32,6 +98,7 @@ class UserProfileWidget extends StatelessWidget {
               child: SingleChildScrollView(
                 child: Column(
                   children: [
+                    // Profile Picture
                     Material(
                       color: Colors.transparent,
                       elevation: 4,
@@ -57,14 +124,16 @@ class UserProfileWidget extends StatelessWidget {
                         ),
                       ),
                     ),
+                    // Name and Username
+                    SizedBox(height: 16),
                     Column(
                       children: [
                         Text(
-                          'John Doe', // Placeholder name
+                          'idk', 
                           style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                         ),
                         Text(
-                          '@johndoe', // Placeholder username
+                          '@mindfuljourney', 
                           style: TextStyle(
                             fontFamily: 'Inter',
                             color: Colors.grey,
@@ -73,6 +142,8 @@ class UserProfileWidget extends StatelessWidget {
                         ),
                       ],
                     ),
+                    // Day Streak and Videos Section
+                    SizedBox(height: 24),
                     Material(
                       color: Colors.transparent,
                       elevation: 2,
@@ -83,7 +154,7 @@ class UserProfileWidget extends StatelessWidget {
                         width: MediaQuery.of(context).size.width * 0.9,
                         height: 100,
                         decoration: BoxDecoration(
-                          color: Theme.of(context).primaryColor,
+                          color: Color(0xa99985),
                           borderRadius: BorderRadius.circular(16),
                         ),
                         child: Padding(
@@ -91,7 +162,9 @@ class UserProfileWidget extends StatelessWidget {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
+                              // Day Streak Column
                               Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Text(
                                     '47',
@@ -103,12 +176,15 @@ class UserProfileWidget extends StatelessWidget {
                                   ),
                                 ],
                               ),
+                              // Divider Between Streak and Videos
                               Container(
                                 width: 1,
-                                height: MediaQuery.of(context).size.height * 0.4,
+                                height: 40, // Fixed height for divider
                                 color: Colors.white.withOpacity(0.3),
                               ),
+                              // Videos Column
                               Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Text(
                                     '156',
@@ -125,6 +201,18 @@ class UserProfileWidget extends StatelessWidget {
                         ),
                       ),
                     ),
+                    const SizedBox(height: 24),
+                    // Settings
+                    _buildOptionTile(context, Icons.settings, 'Settings'),
+                    const SizedBox(height: 16),
+                    _buildOptionTile(context, Icons.notifications, 'Notifications'),
+                    const SizedBox(height: 16),
+                    _buildOptionTile(context, Icons.privacy_tip, 'Privacy'),
+                    const SizedBox(height: 24),
+                    // Logout and Delete Account
+                    _buildDangerTile(context, Icons.logout, 'Log Out', Colors.redAccent),
+                    const SizedBox(height: 16),
+                    _buildDangerTile(context, Icons.delete_forever, 'Delete Account', Colors.red),
                   ],
                 ),
               ),
