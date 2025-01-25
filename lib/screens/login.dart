@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'signup.dart'; // Import the SignUpPage
 
 // Helper function to define a TextStyle
 TextStyle headingStyle(double fontSize, Color color, FontWeight fontWeight) {
@@ -59,7 +60,7 @@ class LoginPage extends StatelessWidget {
                     decoration: InputDecoration(
                       labelText: 'Email',
                       labelStyle: labelStyle(),
-                      border: OutlineInputBorder(),
+                      border: const OutlineInputBorder(),
                     ),
                   ),
                   const SizedBox(height: 16),
@@ -67,52 +68,43 @@ class LoginPage extends StatelessWidget {
                     decoration: InputDecoration(
                       labelText: 'Password',
                       labelStyle: labelStyle(),
-                      border: OutlineInputBorder(),
-                     
+                      border: const OutlineInputBorder(),
                     ),
                   ),
                   const SizedBox(height: 24),
                   ElevatedButton(
-  onPressed: () {
-    // Handle login logic here
-  },
-  style: ElevatedButton.styleFrom(
-    backgroundColor: const Color(0xFF162d3a), // Button background color
-    foregroundColor: Colors.white, // Text color
-    padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 15), // Increase size
-    shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(8.0), // Rounded corners
-    ),
-  ),
-  child: const Text(
-    'Log In',
-    style: TextStyle(fontSize: 18), // Slightly larger text size
-  ),
-),
-
+                    onPressed: () {
+                      // Handle login logic here
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFF162d3a), // Button background color
+                      foregroundColor: Colors.white, // Text color
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 40, vertical: 15), // Increase size
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8.0), // Rounded corners
+                      ),
+                    ),
+                    child: const Text(
+                      'Log In',
+                      style: TextStyle(fontSize: 18), // Slightly larger text size
+                    ),
+                  ),
                   const SizedBox(height: 16),
                   Text(
                     'Or sign in with',
                     style: labelStyle(),
                   ),
                   const SizedBox(height: 16),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      // Replace with actual icons
-                      ElevatedButton(
-                        onPressed: () {
-                          // Handle Google login logic here
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.white,
-                          foregroundColor: Colors.black,
-                        ),
-                        child: const Text('Google'),
-                      ),
-                      const SizedBox(width: 16),
-                      
-                    ],
+                  ElevatedButton(
+                    onPressed: () {
+                      // Handle Google login logic here
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.white,
+                      foregroundColor: Colors.black,
+                    ),
+                    child: const Text('Google'),
                   ),
                   const SizedBox(height: 16),
                   Row(
@@ -121,7 +113,13 @@ class LoginPage extends StatelessWidget {
                       const Text("Don't have an account?"),
                       TextButton(
                         onPressed: () {
-                          // Navigate to signup page
+                          // Navigate to the Sign Up page
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const SignUpPage(),
+                            ),
+                          );
                         },
                         child: const Text('Sign Up'),
                       ),
@@ -135,4 +133,10 @@ class LoginPage extends StatelessWidget {
       ),
     );
   }
+}
+
+void main() {
+  runApp(const MaterialApp(
+    home: LoginPage(),
+  ));
 }
