@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'screens/login.dart';
+import 'screens/demo.dart';
 
 
 
@@ -19,7 +19,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Color(0xfff5f1ed)),
         useMaterial3: true,
       ),
-      home: const LoginPage(),
+      home: const NavigationPage(),
     );
   }
 }
