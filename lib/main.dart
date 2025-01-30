@@ -1,16 +1,41 @@
 import 'package:flutter/material.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'screens/demo.dart';
 
-
-
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized(); 
+  await requestPermissions(); 
   runApp(const MyApp());
+}
+
+Future<void> requestPermissions() async {
+  Map<Permission, PermissionStatus> statuses = await [
+    Permission.camera,
+    Permission.microphone,
+    Permission.storage, 
+    Permission.photos,  
+  ].request();
+
+  if (statuses[Permission.camera]!.isDenied ||
+      statuses[Permission.microphone]!.isDenied ||
+      statuses[Permission.storage]!.isDenied ||
+      statuses[Permission.photos]!.isDenied) {
+    print("Some permissions were denied.");
+  }
+
+
+  if (statuses[Permission.camera]!.isPermanentlyDenied ||
+      statuses[Permission.microphone]!.isPermanentlyDenied ||
+      statuses[Permission.storage]!.isPermanentlyDenied ||
+      statuses[Permission.photos]!.isPermanentlyDenied) {
+    print("Some permissions are permanently denied. Open app settings.");
+    openAppSettings(); 
+  }
 }
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -23,4 +48,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-

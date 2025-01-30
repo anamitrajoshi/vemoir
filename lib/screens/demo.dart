@@ -23,9 +23,9 @@ class NavigationPage extends StatelessWidget {
             _buildNavigationButton(context, 'Home', const HomeWidget()),
             _buildNavigationButton(context, 'Login', const LoginPage()),
             _buildNavigationButton(context, 'Sign Up', const SignUpPage()),
-            _buildNavigationButton(context, 'User Profile', const ProfilePage()),
             _buildNavigationButton(context, 'Video Library', const VideoLibraryWidget()),
             _buildNavigationButton(context, 'Video Saving', const VideoSavingWidget()),
+          
           ],
         ),
       ),
