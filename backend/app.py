@@ -5,10 +5,6 @@ import jwt
 from functools import wraps
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'helloworld'
-
-# MongoDB configuration
-app.config['MONGO_URI'] = 'mongodb+srv://Admin:Akanksha@8136@vemoir.jvitq.mongodb.net/vemoir?retryWrites=true&w=majority&appName=Vemoir'
 mongo = PyMongo(app)
 db = mongo.db
 
