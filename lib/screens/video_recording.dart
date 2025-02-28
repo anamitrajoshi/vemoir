@@ -4,6 +4,7 @@ import 'package:path_provider/path_provider.dart';
 import 'dart:io';
 import 'package:flutter/services.dart';
 import 'package:video_player/video_player.dart';
+import 'package:gallery_saver/gallery_saver.dart';
 
 class VideoRecorderScreen extends StatefulWidget {
   @override
@@ -52,19 +53,22 @@ class _VideoRecorderScreenState extends State<VideoRecorderScreen> {
     setState(() => _isRecording = true);
   }
 
-  Future<void> _stopRecording() async {
-    if (!_isRecording) return;
+Future<void> _stopRecording() async {
+  if (!_isRecording) return;
 
-    final XFile videoFile = await _controller!.stopVideoRecording();
-    final directory = await getApplicationDocumentsDirectory();
-    final savedVideoPath = '${directory.path}/${DateTime.now().millisecondsSinceEpoch}.mp4';
+  final XFile videoFile = await _controller!.stopVideoRecording();
+  
+  setState(() => _isRecording = false);
 
-    File(videoFile.path).copySync(savedVideoPath);
+  final bool? success = await GallerySaver.saveVideo(videoFile.path, albumName: "MyFlutterVideos");
 
-    setState(() => _isRecording = false);
-
-    _playRecordedVideo(savedVideoPath);
+  if (success == true) {
+    print("Video saved to gallery");
+    _playRecordedVideo(videoFile.path);
+  } else {
+    print("Failed to save video to gallery");
   }
+}
 
   void _playRecordedVideo(String path) {
     if (_videoPlayerController != null) {
