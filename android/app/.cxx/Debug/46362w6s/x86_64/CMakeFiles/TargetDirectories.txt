@@ -1,0 +1,2 @@
+/Users/vruddhi/Desktop/vemoir/android/app/.cxx/Debug/46362w6s/x86_64/CMakeFiles/edit_cache.dir
+/Users/vruddhi/Desktop/vemoir/android/app/.cxx/Debug/46362w6s/x86_64/CMakeFiles/rebuild_cache.dir

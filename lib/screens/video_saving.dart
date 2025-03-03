@@ -1,9 +1,13 @@
 import 'dart:ui';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:video_player/video_player.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
 
 class VideoSavingWidget extends StatefulWidget {
-  const VideoSavingWidget({super.key});
+   VideoSavingWidget({super.key});
 
   @override
   State<VideoSavingWidget> createState() => _VideoSavingWidgetState();
@@ -40,7 +44,7 @@ class _VideoSavingWidgetState extends State<VideoSavingWidget> {
       },
       child: Scaffold(
         key: scaffoldKey,
-        backgroundColor: Color(0xFFF5F1ED), // Background color
+        backgroundColor: Color(0xFFF5F1ED), 
         appBar: AppBar(
           backgroundColor: Color(0xFFF5F1ED),
           automaticallyImplyLeading: false,
@@ -252,19 +256,59 @@ class _VideoSavingWidgetState extends State<VideoSavingWidget> {
   }
 }
 
-class VideoPlayerWidget extends StatelessWidget {
-  //video code here, I think this part can go in the widgets folder
+
+class VideoPlayerWidget extends StatefulWidget {
+   VideoPlayerWidget({super.key});
+
+  @override
+  _VideoPlayerWidgetState createState() => _VideoPlayerWidgetState();
+}
+
+class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
+  VideoPlayerController? _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadVideoPath();
+  }
+
+  Future<void> _loadVideoPath() async {
+    final prefs = await SharedPreferences.getInstance();
+    final videoPath = prefs.getString('saved_video_path');
+
+    if (videoPath != null) {
+      _controller = VideoPlayerController.file(File(videoPath))
+        ..initialize().then((_) {
+          setState(() {});
+          _controller?.play();
+        });
+    }
+  }
+
+  @override
+  void dispose() {
+    _controller?.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
       color: Colors.black,
-      child: Center(
-        child: Icon(
-          Icons.play_arrow,
-          color: Colors.white,
-          size: 50,
-        ),
-      ),
+      child: _controller != null && _controller!.value.isInitialized
+          ? AspectRatio(
+              aspectRatio: _controller!.value.aspectRatio,
+              child: VideoPlayer(_controller!),
+            )
+          : Center(
+              child: Icon(
+                Icons.play_arrow,
+                color: Colors.white,
+                size: 50,
+              ),
+            ),
     );
   }
 }
+

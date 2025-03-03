@@ -4,6 +4,8 @@ import 'package:path_provider/path_provider.dart';
 import 'dart:io';
 import 'package:flutter/services.dart';
 import 'package:video_player/video_player.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'video_saving.dart'; 
 
 class VideoRecorderScreen extends StatefulWidget {
   @override
@@ -52,19 +54,28 @@ class _VideoRecorderScreenState extends State<VideoRecorderScreen> {
     setState(() => _isRecording = true);
   }
 
-  Future<void> _stopRecording() async {
-    if (!_isRecording) return;
 
-    final XFile videoFile = await _controller!.stopVideoRecording();
-    final directory = await getApplicationDocumentsDirectory();
-    final savedVideoPath = '${directory.path}/${DateTime.now().millisecondsSinceEpoch}.mp4';
+Future<void> _stopRecording() async {
+  if (!_isRecording) return;
 
-    File(videoFile.path).copySync(savedVideoPath);
+  final XFile videoFile = await _controller!.stopVideoRecording();
+  final directory = await getApplicationDocumentsDirectory();
+  final savedVideoPath = '${directory.path}/${DateTime.now().millisecondsSinceEpoch}.mp4';
 
-    setState(() => _isRecording = false);
+  File(videoFile.path).copySync(savedVideoPath);
+  final prefs = await SharedPreferences.getInstance();
+  await prefs.setString('last_video_path', savedVideoPath);
 
-    _playRecordedVideo(savedVideoPath);
-  }
+  setState(() => _isRecording = false);
+
+ Navigator.push(
+    context,
+    MaterialPageRoute(
+      builder: (context) => VideoSavingWidget(),
+    ),
+  );
+  // _playRecordedVideo(savedVideoPath);
+}
 
   void _playRecordedVideo(String path) {
     if (_videoPlayerController != null) {
