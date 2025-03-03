@@ -149,7 +149,17 @@ Future<void> _stopRecording() async {
                           child: Container(
                             width: size.width,
                             height: size.width / _controller!.value.aspectRatio,
-                            child: CameraPreview(_controller!),
+                            child: Transform(
+  alignment: Alignment.center,
+  transform: Matrix4(
+    0.0, -1.0, 0.0, 0.0,  
+   1.0, 0.0, 0.0, 0.0,  
+    0.0, 0.0, 1.0, 0.0,  
+    0.0, 0.0, 0.0, 1.0   
+  ),
+  child: CameraPreview(_controller!),
+),
+
                           ),
                         ),
                       ),

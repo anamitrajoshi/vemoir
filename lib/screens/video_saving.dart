@@ -273,18 +273,22 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
     _loadVideoPath();
   }
 
-  Future<void> _loadVideoPath() async {
-    final prefs = await SharedPreferences.getInstance();
-    final videoPath = prefs.getString('saved_video_path');
+Future<void> _loadVideoPath() async {
+  final prefs = await SharedPreferences.getInstance();
+  final videoPath = prefs.getString('saved_video_path');
 
-    if (videoPath != null) {
-      _controller = VideoPlayerController.file(File(videoPath))
-        ..initialize().then((_) {
-          setState(() {});
-          _controller?.play();
-        });
-    }
+  if (videoPath != null) {
+    print('Playing video from path: $videoPath');  // 🔍 Debug print
+    _controller = VideoPlayerController.file(File(videoPath))
+      ..initialize().then((_) {
+        setState(() {});
+        _controller?.play();
+      });
+  } else {
+    print('No video found!');  // 🔍 Debug print
   }
+}
+
 
   @override
   void dispose() {
