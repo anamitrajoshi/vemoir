@@ -64,16 +64,24 @@ Future<void> _stopRecording() async {
 
   File(videoFile.path).copySync(savedVideoPath);
   final prefs = await SharedPreferences.getInstance();
-  await prefs.setString('last_video_path', savedVideoPath);
+final saveSuccess = await prefs.setString('last_video_path', savedVideoPath);
 
+if (saveSuccess) {  
+  print('Video path saved successfully: $savedVideoPath');
+  
   setState(() => _isRecording = false);
 
- Navigator.push(
+  Navigator.push(
     context,
     MaterialPageRoute(
       builder: (context) => VideoSavingWidget(),
     ),
   );
+} else {
+  print('Failed to save video path.');
+}
+
+
   // _playRecordedVideo(savedVideoPath);
 }
 

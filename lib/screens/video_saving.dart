@@ -273,19 +273,35 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
     _loadVideoPath();
   }
 
-Future<void> _loadVideoPath() async {
+Future<void> _loadVideoPath({String? newVideoPath}) async {
   final prefs = await SharedPreferences.getInstance();
-  final videoPath = prefs.getString('saved_video_path');
 
-  if (videoPath != null) {
-    print('Playing video from path: $videoPath');  // 🔍 Debug print
-    _controller = VideoPlayerController.file(File(videoPath))
+  if (newVideoPath != null) {
+    await prefs.setString('saved_video_path', newVideoPath);
+  }
+
+  final savedVideoPath = prefs.getString('saved_video_path');
+
+  if (savedVideoPath != null && File(savedVideoPath).existsSync()) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('Playing video from path: $savedVideoPath'),
+        duration: Duration(seconds: 2),
+      ),
+    );
+
+    _controller = VideoPlayerController.file(File(savedVideoPath))
       ..initialize().then((_) {
         setState(() {});
         _controller?.play();
       });
   } else {
-    print('No video found!');  // 🔍 Debug print
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('No video found'),
+        duration: Duration(seconds: 2),
+      ),
+    );
   }
 }
 
