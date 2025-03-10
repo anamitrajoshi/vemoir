@@ -81,7 +81,7 @@ class _VideoSavingWidgetState extends State<VideoSavingWidget> {
                 // Video Player
                 Container(
                   height: 200,
-                  child: VideoPlayerWidget(), // Custom VideoPlayer widget here
+                  child: VideoPlayerWidget(videoPath: widget.videoPath), // Custom VideoPlayer widget here
                 ),
                 Padding(
                   padding: EdgeInsets.all(8), 
