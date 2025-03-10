@@ -5,10 +5,8 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:video_player/video_player.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-
 class VideoSavingWidget extends StatefulWidget {
-
-  final String videoPath; 
+  final String videoPath;
 
   VideoSavingWidget({super.key, required this.videoPath});
   @override
@@ -16,6 +14,7 @@ class VideoSavingWidget extends StatefulWidget {
 }
 
 class _VideoSavingWidgetState extends State<VideoSavingWidget> {
+  VideoPlayerController? _videoController;
   late TextEditingController textController1;
   late TextEditingController textController2;
   double ratingBarValue = 0.0;
@@ -28,12 +27,20 @@ class _VideoSavingWidgetState extends State<VideoSavingWidget> {
     super.initState();
     textController1 = TextEditingController();
     textController2 = TextEditingController();
+    if (widget.videoPath.isNotEmpty) {
+      _videoController = VideoPlayerController.file(File(widget.videoPath))
+        ..initialize().then((_) {
+          setState(() {});
+          _videoController?.play();
+        });
+    }
   }
 
   @override
   void dispose() {
     textController1.dispose();
     textController2.dispose();
+    _videoController?.dispose();
     super.dispose();
   }
 
@@ -46,9 +53,9 @@ class _VideoSavingWidgetState extends State<VideoSavingWidget> {
       },
       child: Scaffold(
         key: scaffoldKey,
-        backgroundColor: Color(0xFFF5F1ED), 
+        backgroundColor: Color(0xFFEDE7E3), // Older theme color
         appBar: AppBar(
-          backgroundColor: Color(0xFFF5F1ED),
+          backgroundColor: Color(0xFFEDE7E3), // Older theme color
           automaticallyImplyLeading: false,
           leading: IconButton(
             icon: Icon(
@@ -73,30 +80,36 @@ class _VideoSavingWidgetState extends State<VideoSavingWidget> {
         ),
         body: SafeArea(
           top: true,
-          child: SingleChildScrollView( 
+          child: SingleChildScrollView(
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly, // Space evenly
-              crossAxisAlignment: CrossAxisAlignment.center, // Align items centrally
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 // Video Player
                 Container(
                   height: 200,
-                  child: VideoPlayerWidget(videoPath: widget.videoPath), // Custom VideoPlayer widget here
+                  child: _videoController != null && _videoController!.value.isInitialized
+                      ? AspectRatio(
+                          aspectRatio: _videoController!.value.aspectRatio,
+                          child: VideoPlayer(_videoController!),
+                        )
+                      : Center(child: CircularProgressIndicator()),
                 ),
+                SizedBox(height: 80), // Shift stars even lower
                 Padding(
-                  padding: EdgeInsets.all(8), 
+                  padding: EdgeInsets.all(8),
                   child: Text(
                     'Your mood today?',
                     style: TextStyle(
-                      fontSize: 18, 
+                      fontSize: 18,
                       fontWeight: FontWeight.w500,
                     ),
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4), 
+                  padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                   child: Container(
-                    width: 400, 
+                    width: 400,
                     height: 46,
                     decoration: BoxDecoration(
                       color: Colors.grey[200],
@@ -115,24 +128,24 @@ class _VideoSavingWidgetState extends State<VideoSavingWidget> {
                       initialRating: ratingBarValue,
                       unratedColor: Colors.grey,
                       itemCount: 5,
-                      itemPadding: EdgeInsets.all(4), 
+                      itemPadding: EdgeInsets.all(4),
                       itemSize: 30,
                       glowColor: Colors.orange,
                     ),
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.all(8), 
+                  padding: EdgeInsets.all(8),
                   child: Text(
                     'Add tags',
                     style: TextStyle(
-                      fontSize: 18, 
+                      fontSize: 18,
                       fontWeight: FontWeight.w500,
                     ),
                   ),
                 ),
                 Container(
-                  width: 400, 
+                  width: 400,
                   height: 46,
                   decoration: BoxDecoration(
                     color: Colors.grey[200],
@@ -150,17 +163,17 @@ class _VideoSavingWidgetState extends State<VideoSavingWidget> {
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.all(8), 
+                  padding: EdgeInsets.all(8),
                   child: Text(
                     'Add people',
                     style: TextStyle(
-                      fontSize: 18, 
+                      fontSize: 18,
                       fontWeight: FontWeight.w500,
                     ),
                   ),
                 ),
                 Container(
-                  width: 400, 
+                  width: 400,
                   height: 46,
                   decoration: BoxDecoration(
                     color: Colors.grey[200],
@@ -178,11 +191,11 @@ class _VideoSavingWidgetState extends State<VideoSavingWidget> {
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.all(8), 
+                  padding: EdgeInsets.all(8),
                   child: Text(
                     'Storage Location',
                     style: TextStyle(
-                      fontSize: 18, 
+                      fontSize: 18,
                       fontWeight: FontWeight.w500,
                     ),
                   ),
@@ -204,7 +217,7 @@ class _VideoSavingWidgetState extends State<VideoSavingWidget> {
                   isExpanded: true,
                 ),
                 Padding(
-                  padding: EdgeInsets.all(16), 
+                  padding: EdgeInsets.all(16),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
@@ -215,7 +228,7 @@ class _VideoSavingWidgetState extends State<VideoSavingWidget> {
                         child: Text(
                           'Save',
                           style: TextStyle(
-                            fontSize: 18, 
+                            fontSize: 18,
                             color: Colors.white,
                           ),
                         ),
@@ -224,7 +237,7 @@ class _VideoSavingWidgetState extends State<VideoSavingWidget> {
                               horizontal: 24, vertical: 8),
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(8)),
-                          backgroundColor: Color(0xFF70798C), // Button color
+                          backgroundColor: Color(0xFF70798C),
                         ),
                       ),
                       ElevatedButton(
@@ -234,7 +247,7 @@ class _VideoSavingWidgetState extends State<VideoSavingWidget> {
                         child: Text(
                           'Discard',
                           style: TextStyle(
-                            fontSize: 18, 
+                            fontSize: 18,
                             color: Colors.white,
                           ),
                         ),
@@ -243,7 +256,7 @@ class _VideoSavingWidgetState extends State<VideoSavingWidget> {
                               horizontal: 24, vertical: 8),
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(8)),
-                          backgroundColor: Color(0xFF70798C), // Button color
+                          backgroundColor: Color(0xFF70798C),
                         ),
                       ),
                     ],
@@ -254,72 +267,6 @@ class _VideoSavingWidgetState extends State<VideoSavingWidget> {
           ),
         ),
       ),
-    );
-  }
-}
-
-
-class VideoPlayerWidget extends StatefulWidget {
-   final String videoPath;  
-
-  VideoPlayerWidget({super.key, required this.videoPath});
-
-  @override
-  _VideoPlayerWidgetState createState() => _VideoPlayerWidgetState();
-}
-
-class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
-  VideoPlayerController? _controller;
-
-  @override
-  void initState() {
-    super.initState();
-    _initializeVideo();
-  }
-
-  Future<void> _initializeVideo() async {
-    if (File(widget.videoPath).existsSync()) {
-      _controller = VideoPlayerController.file(File(widget.videoPath))
-        ..initialize().then((_) {
-          setState(() {});
-          _controller?.play();
-        });
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Video not found'),
-          duration: Duration(seconds: 2),
-        ),
-      );
-    }
-  }
-
-  @override
-  void dispose() {
-    _controller?.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      color: Colors.black,
-      child: _controller != null && _controller!.value.isInitialized
-          ? FittedBox(
-              fit: BoxFit.contain,
-              child: SizedBox(
-                width: _controller!.value.size.width,
-                height: _controller!.value.size.height,
-                child: VideoPlayer(_controller!),
-              ),
-            )
-          : Center(
-              child: Icon(
-                Icons.play_arrow,
-                color: Colors.white,
-                size: 50,
-              ),
-            ),
     );
   }
 }
