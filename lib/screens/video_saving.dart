@@ -7,8 +7,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 
 class VideoSavingWidget extends StatefulWidget {
-   VideoSavingWidget({super.key});
 
+  final String videoPath; 
+
+  VideoSavingWidget({super.key, required this.videoPath});
   @override
   State<VideoSavingWidget> createState() => _VideoSavingWidgetState();
 }
@@ -258,7 +260,9 @@ class _VideoSavingWidgetState extends State<VideoSavingWidget> {
 
 
 class VideoPlayerWidget extends StatefulWidget {
-   VideoPlayerWidget({super.key});
+   final String videoPath;  
+
+  VideoPlayerWidget({super.key, required this.videoPath});
 
   @override
   _VideoPlayerWidgetState createState() => _VideoPlayerWidgetState();
@@ -270,41 +274,25 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
   @override
   void initState() {
     super.initState();
-    _loadVideoPath();
+    _initializeVideo();
   }
 
-Future<void> _loadVideoPath({String? newVideoPath}) async {
-  final prefs = await SharedPreferences.getInstance();
-
-  if (newVideoPath != null) {
-    await prefs.setString('saved_video_path', newVideoPath);
+  Future<void> _initializeVideo() async {
+    if (File(widget.videoPath).existsSync()) {
+      _controller = VideoPlayerController.file(File(widget.videoPath))
+        ..initialize().then((_) {
+          setState(() {});
+          _controller?.play();
+        });
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Video not found'),
+          duration: Duration(seconds: 2),
+        ),
+      );
+    }
   }
-
-  final savedVideoPath = prefs.getString('saved_video_path');
-
-  if (savedVideoPath != null && File(savedVideoPath).existsSync()) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('Playing video from path: $savedVideoPath'),
-        duration: Duration(seconds: 2),
-      ),
-    );
-
-    _controller = VideoPlayerController.file(File(savedVideoPath))
-      ..initialize().then((_) {
-        setState(() {});
-        _controller?.play();
-      });
-  } else {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('No video found'),
-        duration: Duration(seconds: 2),
-      ),
-    );
-  }
-}
-
 
   @override
   void dispose() {
@@ -317,9 +305,13 @@ Future<void> _loadVideoPath({String? newVideoPath}) async {
     return Container(
       color: Colors.black,
       child: _controller != null && _controller!.value.isInitialized
-          ? AspectRatio(
-              aspectRatio: _controller!.value.aspectRatio,
-              child: VideoPlayer(_controller!),
+          ? FittedBox(
+              fit: BoxFit.contain,
+              child: SizedBox(
+                width: _controller!.value.size.width,
+                height: _controller!.value.size.height,
+                child: VideoPlayer(_controller!),
+              ),
             )
           : Center(
               child: Icon(
@@ -331,4 +323,3 @@ Future<void> _loadVideoPath({String? newVideoPath}) async {
     );
   }
 }
-

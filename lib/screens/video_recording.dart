@@ -71,12 +71,13 @@ if (saveSuccess) {
   
   setState(() => _isRecording = false);
 
-  Navigator.push(
-    context,
-    MaterialPageRoute(
-      builder: (context) => VideoSavingWidget(),
-    ),
-  );
+ Navigator.push(
+  context,
+  MaterialPageRoute(
+    builder: (context) => VideoSavingWidget(videoPath: savedVideoPath),
+  ),
+);
+
 } else {
   print('Failed to save video path.');
 }
