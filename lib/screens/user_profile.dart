@@ -1,6 +1,16 @@
 import 'package:flutter/material.dart';
+import 'login.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-
+void _logout(BuildContext context) async {
+  final prefs = await SharedPreferences.getInstance();
+  await prefs.remove('token'); // Remove stored token
+  Navigator.pushAndRemoveUntil(
+    context,
+    MaterialPageRoute(builder: (context) => const LoginPage()),
+    (route) => false, // Clears the navigation stack
+  );
+}
 
 class ProfilePage extends StatelessWidget {
   Widget _buildOptionTile(BuildContext context, IconData icon, String title) {
@@ -36,37 +46,32 @@ class ProfilePage extends StatelessWidget {
   }
 
   // Danger Tile Method (for logout, delete account)
-  Widget _buildDangerTile(BuildContext context, IconData icon, String title, Color color) {
-    return Row(
+Widget _buildDangerTile(BuildContext context, IconData icon, String title, Color color, VoidCallback onTap) {
+  return GestureDetector(
+    onTap: onTap,
+    child: Row(
       mainAxisSize: MainAxisSize.max,
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Row(
           mainAxisSize: MainAxisSize.max,
           children: [
-            Icon(
-              icon,
-              color: color,
-              size: 24,
-            ),
+            Icon(icon, color: color, size: 24),
             const SizedBox(width: 12),
             Material(
               color: Colors.transparent,
               child: Text(
                 title,
-                style: TextStyle(
-                  fontFamily: 'Inter',
-                  fontSize: 16,
-                  color: color,
-                  letterSpacing: 0.0,
-                ),
+                style: TextStyle(fontFamily: 'Inter', fontSize: 16, color: color),
               ),
             ),
           ],
         ),
       ],
-    );
-  }
+    ),
+  );
+}
+
 
   @override
   Widget build(BuildContext context) {
@@ -210,9 +215,9 @@ class ProfilePage extends StatelessWidget {
                     _buildOptionTile(context, Icons.privacy_tip, 'Privacy'),
                     const SizedBox(height: 24),
                     // Logout and Delete Account
-                    _buildDangerTile(context, Icons.logout, 'Log Out', Colors.redAccent),
-                    const SizedBox(height: 16),
-                    _buildDangerTile(context, Icons.delete_forever, 'Delete Account', Colors.red),
+                    _buildDangerTile(context, Icons.logout, 'Log Out', Colors.redAccent,   () => _logout(context)),
+                    // const SizedBox(height: 16),
+                    // _buildDangerTile(context, Icons.delete_forever, 'Delete Account', Colors.red),
                   ],
                 ),
               ),

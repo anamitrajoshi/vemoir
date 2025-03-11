@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:vemoir/screens/home.dart';
+import 'package:vemoir/screens/signup.dart';
 
 // Helper function to define a TextStyle
 TextStyle headingStyle(double fontSize, Color color, FontWeight fontWeight) {
@@ -188,7 +189,9 @@ class _LoginPageState extends State<LoginPage> {
                       const Text("Don't have an account?"),
                       TextButton(
                         onPressed: () {
-                          Navigator.pushNamed(context, '/signup');
+                          Navigator.push(
+                            context, MaterialPageRoute(builder: (context) => SignUpPage()),
+                          );
                         },
                         child: const Text('Sign Up'),
                       ),
