@@ -3,13 +3,16 @@ from flask_pymongo import PyMongo
 import pymongo
 import jwt
 from functools import wraps
+from datetime import datetime
 
 app = Flask(__name__)
+app.config['SECRET_KEY'] = 'your_secret_key'  # Replace with a secure key
 mongo = PyMongo(app)
 db = mongo.db
 
-# User Schema (MongoDB collection 'users')
+# Collections
 users_collection = db.users
+videos_collection = db.videos
 
 # JWT Token verification decorator
 def token_required(f):
@@ -46,7 +49,6 @@ def create_user():
     if existing_user:
         return jsonify({'message': 'Email already registered!'}), 400
 
-    # Insert new user
     users_collection.insert_one({'username': username, 'email': email, 'password': password})
     return jsonify({'message': 'User created successfully!'}), 200
 
@@ -65,21 +67,52 @@ def login():
     token = jwt.encode({'user': auth.username}, app.config['SECRET_KEY'], algorithm="HS256")
     return jsonify({'token': token})
 
-@app.route('/videos', methods=['POST'])
-@token_required
-def add_video(current_user):
-    data = request.get_json()
-    data['username'] = current_user  # Associate video with uploader
-    db.videos.insert_one(data)
-    return jsonify({'message': 'Video saved successfully!'})
 
-@app.route('/videos', methods=['GET'])
+@app.route('/save_video', methods=['POST'])
+@token_required
+def save_video(current_user):
+    data = request.get_json()
+    
+    video_path = data.get('video_path')
+    tags = data.get('tags', [])
+    people = data.get('people', [])
+    timestamp = data.get('timestamp')
+
+    if not video_path or not timestamp:
+        return jsonify({'message': 'Video path and timestamp are required!'}), 400
+    
+    try:
+        upload_time = datetime.strptime(timestamp, '%Y-%m-%dT%H:%M:%SZ')
+    except ValueError:
+        return jsonify({'message': 'Invalid timestamp format! Use ISO format (YYYY-MM-DDTHH:MM:SSZ)'}), 400
+
+    video_data = {
+        'username': current_user,
+        'video_path': video_path,
+        'tags': tags,
+        'people': people,
+        'upload_time': upload_time
+    }
+
+    videos_collection.insert_one(video_data)
+    return jsonify({'message': 'Video saved successfully!'}), 201
+
+@app.route('/get_videos', methods=['GET'])
 @token_required
 def get_videos(current_user):
-    videos = db.videos.find({'username': current_user})
-    output = [{'title': video['title'], 'description': video['description']} for video in videos]
-    return jsonify({'videos': output})
+    videos = videos_collection.find({'username': current_user})
+    
+    output = []
+    for video in videos:
+        output.append({
+            'video_path': video.get('video_path'),
+            'tags': video.get('tags', []),
+            'people': video.get('people', []),
+            'timestamp': video.get('upload_time').strftime('%Y-%m-%dT%H:%M:%SZ')
+        })
+    
+    return jsonify({'videos': output}), 200
+
 
 if __name__ == '__main__':
     app.run(debug=True)
-
