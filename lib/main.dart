@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'screens/video_recording.dart';
 import 'screens/demo.dart';
+import 'screens/video_display.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized(); 
@@ -46,7 +47,8 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       //home: NavigationPage(),
-      home: VideoRecorderScreen(),
+      //home: VideoRecorderScreen(),
+      home:VideoDisplayWidget(id: '3268')
     );
   }
 }
