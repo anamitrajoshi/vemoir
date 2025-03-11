@@ -104,7 +104,7 @@ class _VideoDisplayWidgetState extends State<VideoDisplayWidget> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     // Video Player
-                   Container(
+             Container(
   height: 200,
   width: double.infinity,
   decoration: BoxDecoration(
@@ -114,13 +114,9 @@ class _VideoDisplayWidgetState extends State<VideoDisplayWidget> {
   child: _videoController != null && _videoController!.value.isInitialized
       ? ClipRRect(
           borderRadius: BorderRadius.circular(12),
-          child: FittedBox(
-            fit: BoxFit.cover, 
-            child: SizedBox(
-              width: _videoController!.value.size.width,
-              height: _videoController!.value.size.height,
-              child: VideoPlayer(_videoController!),
-            ),
+          child: AspectRatio(
+            aspectRatio: _videoController!.value.aspectRatio,
+            child: VideoPlayer(_videoController!),
           ),
         )
       : const Center(child: CircularProgressIndicator()),
