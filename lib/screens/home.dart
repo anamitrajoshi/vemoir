@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:vemoir/screens/user_profile.dart';
+import 'package:vemoir/screens/video_recording.dart';
+import 'package:vemoir/screens/video_library.dart';
 
 class HomeWidget extends StatefulWidget {
   const HomeWidget({super.key});
@@ -27,8 +30,11 @@ class _HomeWidgetState extends State<HomeWidget> {
               padding: const EdgeInsets.all(8),
               child: GestureDetector(
                 onTap: () {
-                  // Navigate to user profile
-                  Navigator.pushNamed(context, 'user_profile');
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => ProfilePage()),
+                  );
+
                 },
                 child: Container(
                   width: 60,
@@ -147,8 +153,11 @@ class _HomeWidgetState extends State<HomeWidget> {
                 padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
                 child: GestureDetector(
                   onTap: () {
-                    // Navigate to video recording screen
-                    Navigator.pushNamed(context, 'video_recording_screen');
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => VideoRecorderScreen()),
+                    );
+
                   },
                   child: Container(
                     height: 100,
@@ -297,7 +306,11 @@ class _HomeWidgetState extends State<HomeWidget> {
                   child: ElevatedButton(
                     onPressed: () {
                       // Navigate to video library
-                      Navigator.pushNamed(context, 'video_library');
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => VideoLibraryWidget()),
+                      );
+
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.white,

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'screens/video_recording.dart';
+import 'screens/demo.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized(); 
@@ -44,7 +45,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Color(0xfff5f1ed)),
         useMaterial3: true,
       ),
-      home: VideoRecorderScreen(),
+      home: NavigationPage(),
     );
   }
 }
