@@ -20,17 +20,17 @@ class _SignUpPageState extends State<SignUpPage> {
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _confirmPasswordController = TextEditingController();
 
-  final String backendUrl = "http://127.0.0.1:5000"; // Change if running on a real device
+final String backendUrl = "http://192.168.xx.xx:5000"; // Use the same IP as login
 
-  // Method to sign up
-  Future<void> _signUp() async {
-    if (_passwordController.text != _confirmPasswordController.text) {
-      _showMessage("Passwords do not match", Colors.red);
-      return;
-    }
+Future<void> _signUp() async {
+  if (_passwordController.text != _confirmPasswordController.text) {
+    _showMessage("Passwords do not match", Colors.red);
+    return;
+  }
 
+  try {
     final response = await http.post(
-      Uri.parse("$backendUrl/signin"),
+      Uri.parse("$backendUrl/users"),  // Use "signup" instead of "signin" if needed
       headers: {"Content-Type": "application/json"},
       body: jsonEncode({
         "username": _nameController.text,
@@ -39,14 +39,23 @@ class _SignUpPageState extends State<SignUpPage> {
       }),
     );
 
-    if (response.statusCode == 200) {
+    print('Response status: ${response.statusCode}');
+    print('Response body: ${response.body}');
+
+    final responseData = jsonDecode(response.body);
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
       _showMessage("Sign Up Successful!", Colors.green);
       Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const LoginPage()));
     } else {
-      final responseData = jsonDecode(response.body);
       _showMessage(responseData['message'] ?? "Signup failed", Colors.red);
     }
+  } catch (e) {
+    print("Error: $e");
+    _showMessage("An error occurred: $e", Colors.red);
   }
+}
+
 
   void _showMessage(String message, Color color) {
     ScaffoldMessenger.of(context).showSnackBar(
