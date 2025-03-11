@@ -45,7 +45,7 @@ class _VideoSavingWidgetState extends State<VideoSavingWidget> {
   }
 
   Future<void> saveVideo() async {
-    final String apiUrl = 'http://localhost:5000/save_video';
+    final String apiUrl = 'http://10.0.2.2:8000/videos';
     final String token = 'YOUR_TOKEN_HERE'; // Add valid token here
 
     final Map<String, dynamic> data = {

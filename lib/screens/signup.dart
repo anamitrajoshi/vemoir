@@ -20,7 +20,7 @@ class _SignUpPageState extends State<SignUpPage> {
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _confirmPasswordController = TextEditingController();
 
-final String backendUrl = "http://192.168.xx.xx:5000"; // Use the same IP as login
+final String backendUrl = "http://10.0.2.2:8000"; // Use the same IP as login
 
 Future<void> _signUp() async {
   if (_passwordController.text != _confirmPasswordController.text) {
