@@ -28,7 +28,7 @@ class _VideoLibraryWidgetState extends State<VideoLibraryWidget> {
 
   Future<void> _fetchVideos() async {
     try {
-      final response = await http.get(Uri.parse('http://192.168.xx.xx:5000/videos'));
+      final response = await http.get(Uri.parse('http://10.0.2.2:8000/videos'));
       if (response.statusCode == 200 || response.statusCode == 201) {
         setState(() {
           _videos = json.decode(response.body);

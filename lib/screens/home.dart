@@ -32,7 +32,7 @@ class _HomeWidgetState extends State<HomeWidget> {
                 onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => ProfilePage()),
+                    MaterialPageRoute(builder: (context) => ProfilePage(id:"1")),
                   );
 
                 },
