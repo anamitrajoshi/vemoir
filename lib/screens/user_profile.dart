@@ -70,6 +70,7 @@ class _ProfilePageState extends State<ProfilePage> {
     final Map<String, dynamic> data = {
       'name': name,
       'username': username,
+      'profile_picture': profilePicture,
     };
 
     try {
@@ -89,14 +90,20 @@ class _ProfilePageState extends State<ProfilePage> {
     }
   }
 
-  Future<void> _updateProfilePicture() async {
-    final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
-    if (pickedFile != null) {
-      setState(() {
-        profilePicture = pickedFile.path;
-      });
-    }
+Future<void> _updateProfilePicture() async {
+  final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
+  
+  if (pickedFile != null) {
+    List<int> imageBytes = await File(pickedFile.path).readAsBytes();
+    String base64Image = base64Encode(imageBytes);
+
+    setState(() {
+      profilePicture = base64Image; 
+    });
+
+    saveProfile(); 
   }
+}
 
   void _editName() {
     showDialog(
