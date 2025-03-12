@@ -9,7 +9,9 @@ import 'dart:math';
 import 'package:intl/intl.dart';
 
 class VideoLibraryWidget extends StatefulWidget {
-  const VideoLibraryWidget({Key? key}) : super(key: key);
+   final String userId;
+
+  const VideoLibraryWidget({Key? key, required this.userId}) : super(key: key);
 
   @override
   State<VideoLibraryWidget> createState() => _VideoLibraryWidgetState();

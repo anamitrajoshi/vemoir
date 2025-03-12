@@ -8,6 +8,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'video_saving.dart'; 
 
 class VideoRecorderScreen extends StatefulWidget {
+  final String userId;
+
+  const VideoRecorderScreen({Key? key, required this.userId}) : super(key: key);
+
   @override
   _VideoRecorderScreenState createState() => _VideoRecorderScreenState();
 }
@@ -74,7 +78,7 @@ if (saveSuccess) {
  Navigator.push(
   context,
   MaterialPageRoute(
-    builder: (context) => VideoSavingWidget(videoPath: savedVideoPath),
+    builder: (context) => VideoSavingWidget(videoPath: savedVideoPath, userId: widget.userId,),
   ),
 );
 

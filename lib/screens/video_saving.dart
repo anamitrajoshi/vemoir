@@ -8,12 +8,14 @@ import 'package:http/http.dart' as http;
 
 class VideoSavingWidget extends StatefulWidget {
   final String videoPath;
+  final String userId; 
 
-  VideoSavingWidget({super.key, required this.videoPath});
+  const VideoSavingWidget({super.key, required this.videoPath, required this.userId});
 
   @override
   State<VideoSavingWidget> createState() => _VideoSavingWidgetState();
 }
+
 
 class _VideoSavingWidgetState extends State<VideoSavingWidget> {
   VideoPlayerController? _videoController;

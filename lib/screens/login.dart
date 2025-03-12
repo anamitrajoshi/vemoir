@@ -58,7 +58,7 @@ class _LoginPageState extends State<LoginPage> {
       final responseData = jsonDecode(response.body);
 
       if (response.statusCode == 200 && responseData.isNotEmpty) {
-        final token = responseData[0]['token'];
+        final userId = responseData[0]['id'];
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('Login successful! 🎉'),
@@ -68,7 +68,7 @@ class _LoginPageState extends State<LoginPage> {
 
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => const HomeWidget()),
+          MaterialPageRoute(builder: (context) => HomeWidget(userId: userId)),
         );
       } else {
         ScaffoldMessenger.of(context).showSnackBar(

@@ -20,10 +20,10 @@ class NavigationPage extends StatelessWidget {
         padding: const EdgeInsets.all(16.0),
         child: ListView(
           children: [
-            _buildNavigationButton(context, 'Home', const HomeWidget()),
+            _buildNavigationButton(context, 'Home', const HomeWidget(userId: '1')),
             _buildNavigationButton(context, 'Login', const LoginPage()),
             _buildNavigationButton(context, 'Sign Up', const SignUpPage()),
-            _buildNavigationButton(context, 'Video Library', const VideoLibraryWidget()),
+            _buildNavigationButton(context, 'Video Library', const VideoLibraryWidget(userId: '1',)),
           
           ],
         ),

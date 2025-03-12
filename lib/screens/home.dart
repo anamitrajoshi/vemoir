@@ -5,7 +5,8 @@ import 'package:vemoir/screens/video_recording.dart';
 import 'package:vemoir/screens/video_library.dart';
 
 class HomeWidget extends StatefulWidget {
-  const HomeWidget({super.key});
+  final String userId;
+  const HomeWidget({super.key, required this.userId});
 
   @override
   State<HomeWidget> createState() => _HomeWidgetState();
@@ -32,9 +33,8 @@ class _HomeWidgetState extends State<HomeWidget> {
                 onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => ProfilePage(id:"1")),
+                    MaterialPageRoute(builder: (context) => ProfilePage(id: widget.userId)),
                   );
-
                 },
                 child: Container(
                   width: 60,
@@ -57,107 +57,14 @@ class _HomeWidgetState extends State<HomeWidget> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Greeting Container
-              Padding(
-                padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.grey[200],
-                    borderRadius: BorderRadius.circular(12),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black12,
-                        blurRadius: 4,
-                        offset: const Offset(0, 2),
-                      ),
-                    ],
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Good Morning,',
-                          style: GoogleFonts.outfit(
-                            fontSize: 24,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                        const Divider(
-                          height: 24,
-                          thickness: 2,
-                          color: Colors.white,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            // Current Streak
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    'Current Streak',
-                                    style: GoogleFonts.inter(fontSize: 16),
-                                  ),
-                                  Text(
-                                    '1',
-                                    style: GoogleFonts.outfit(
-                                      fontSize: 32,
-                                      fontWeight: FontWeight.w300,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            // Avg. Mood
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    'Avg. Mood',
-                                    style: GoogleFonts.inter(fontSize: 16),
-                                  ),
-                                  Row(
-                                    children: [
-                                      Text(
-                                        '4.6',
-                                        style: GoogleFonts.outfit(
-                                          fontSize: 32,
-                                          fontWeight: FontWeight.w300,
-                                        ),
-                                      ),
-                                      const SizedBox(width: 4),
-                                      const Icon(
-                                        Icons.star_rounded,
-                                        color: Colors.grey,
-                                        size: 24,
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-              
-              // Journal Today Section
               Padding(
                 padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
                 child: GestureDetector(
                   onTap: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => VideoRecorderScreen()),
+                      MaterialPageRoute(builder: (context) => VideoRecorderScreen(userId: widget.userId)),
                     );
-
                   },
                   child: Container(
                     height: 100,
@@ -174,7 +81,6 @@ class _HomeWidgetState extends State<HomeWidget> {
                     ),
                     child: Row(
                       children: [
-                        // Image
                         ClipRRect(
                           borderRadius: BorderRadius.circular(8),
                           child: Image.network(
@@ -185,7 +91,6 @@ class _HomeWidgetState extends State<HomeWidget> {
                           ),
                         ),
                         const SizedBox(width: 8),
-                        // Journal Details
                         Expanded(
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -214,103 +119,15 @@ class _HomeWidgetState extends State<HomeWidget> {
                   ),
                 ),
               ),
-              
-              // Your Videos Section
-              Padding(
-                padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
-                child: Text(
-                  'Your videos',
-                  style: GoogleFonts.outfit(
-                    fontSize: 20,
-                    color: Colors.black87,
-                  ),
-                ),
-              ),
-              
-              // Video Item
-              Padding(
-                padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(8),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black12,
-                        blurRadius: 7,
-                        offset: const Offset(0, 3),
-                      ),
-                    ],
-                  ),
-                  child: Column(
-                    children: [
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(8),
-                        child: Image.network(
-                          'https://images.unsplash.com/photo-1607109793514-3075a25f6040?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTR8fHBvdXIlMjBvdmVyfGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=800&q=60',
-                          width: double.infinity,
-                          height: 140,
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(12),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              '27 December, 2024',
-                              style: GoogleFonts.outfit(
-                                fontSize: 18,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                            const SizedBox(height: 8),
-                            Row(
-                              children: [
-                                Text(
-                                  'Mood',
-                                  style: GoogleFonts.inter(
-                                    fontSize: 14,
-                                    color: Colors.grey,
-                                  ),
-                                ),
-                                const Spacer(),
-                                Text(
-                                  '4.5',
-                                  style: GoogleFonts.outfit(
-                                    fontSize: 24,
-                                    fontWeight: FontWeight.w300,
-                                  ),
-                                ),
-                                const SizedBox(width: 4),
-                                const Icon(
-                                  Icons.star_rounded,
-                                  color: Colors.grey,
-                                  size: 24,
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              
-              // View More Button
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 16),
                 child: Center(
                   child: ElevatedButton(
                     onPressed: () {
-                      // Navigate to video library
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => VideoLibraryWidget()),
+                        MaterialPageRoute(builder: (context) => VideoLibraryWidget(userId: widget.userId)),
                       );
-
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.white,
