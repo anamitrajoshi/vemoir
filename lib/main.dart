@@ -46,9 +46,9 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Color(0xfff5f1ed)),
         useMaterial3: true,
       ),
-      //home: NavigationPage(),
+      home: NavigationPage(),
       //home: VideoRecorderScreen(),
-      home:VideoDisplayWidget(id: '3268')
+      //home:VideoDisplayWidget(id: '3268')
     );
   }
 }

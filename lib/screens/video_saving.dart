@@ -45,7 +45,7 @@ class _VideoSavingWidgetState extends State<VideoSavingWidget> {
   }
 
   Future<void> saveVideo() async {
-    final String apiUrl = 'http://10.0.2.2:8000/videos';
+    final String apiUrl = 'http://192.168.xx.xx:5000/videos';
     final String token = 'YOUR_TOKEN_HERE'; // Add valid token here
 
     final Map<String, dynamic> data = {
@@ -65,7 +65,7 @@ class _VideoSavingWidgetState extends State<VideoSavingWidget> {
         body: json.encode(data),
       );
 
-      if (response.statusCode == 200) {
+      if (response.statusCode == 200 || response.statusCode == 201) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Video saved successfully!')),
         );

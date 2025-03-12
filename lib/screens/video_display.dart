@@ -27,7 +27,7 @@ class _VideoDisplayWidgetState extends State<VideoDisplayWidget> {
   }
 
   Future<void> _fetchVideoDetails() async {
-    final String apiUrl = 'http://10.0.2.2:8000/videos/${widget.id}';
+    final String apiUrl = 'http://192.168.xx.xx:5000/videos/${widget.id}';
     final String token = 'YOUR_TOKEN_HERE'; // Add valid token here
 
     try {
