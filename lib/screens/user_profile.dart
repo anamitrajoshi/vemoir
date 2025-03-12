@@ -44,7 +44,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
   Future<void> fetchUserData() async {
     final response = await http.get(
-      Uri.parse('http://10.0.2.2:8000/users/${widget.id}'),
+      Uri.parse('http://192.168.xx.xx:5000/users/${widget.id}'),
     );
 
     if (response.statusCode == 200) {
@@ -53,7 +53,7 @@ class _ProfilePageState extends State<ProfilePage> {
       setState(() {
         name = data['name'];
         username = data['username'];
-        profilePicture = data['profile_picture'] ?? 'https://via.placeholder.com/100';
+        profilePicture = data['profile_picture'] ?? 'https://cdn-icons-png.flaticon.com/512/1144/1144760.png';
         streak = data['streak'] ?? 0;
         videos = data['videos'] ?? 0;
         _nameController.text = name ?? '';
@@ -65,7 +65,7 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   Future<void> saveProfile() async {
-    final String apiUrl = 'http://10.0.2.2:8000/users/${widget.id}';
+    final String apiUrl = 'http://192.168.xx.xx:5000/users/${widget.id}';
 
     final Map<String, dynamic> data = {
       'name': name,
@@ -244,13 +244,21 @@ Future<void> _updateProfilePicture() async {
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(60),
                       child: profilePicture != null
-                          ? Image.file(
-                              File(profilePicture!),
-                              width: 120,
-                              height: 120,
-                              fit: BoxFit.cover,
-                            )
+                          ? profilePicture!.startsWith('http')
+                              ? Image.network(
+                                  profilePicture!,
+                                  width: 120,
+                                  height: 120,
+                                  fit: BoxFit.cover,
+                                )
+                              : Image.memory(
+                                  base64Decode(profilePicture!),
+                                  width: 120,
+                                  height: 120,
+                                  fit: BoxFit.cover,
+                                )
                           : const Icon(Icons.person, size: 50),
+
                     ),
                   ),
                 ),
@@ -263,7 +271,7 @@ Future<void> _updateProfilePicture() async {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text(name ?? 'Loading...', style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                      Text(name ?? 'What is your name?', style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
                       IconButton(icon: const Icon(Icons.edit, size: 20), onPressed: _editName),
                     ],
                   ),
